@@ -2,80 +2,127 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Special Surprise 💕</title>
+<title>For Someone Special 💖</title>
+
 <style>
-body{margin:0;font-family:Arial, sans-serif;overflow:hidden;}
-.page{width:100%;height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column;position:absolute;transition:0.6s ease;text-align:center;padding:20px;}
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  overflow:hidden;
+}
+
+.page{
+  width:100%;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  position:absolute;
+  transition:0.6s ease;
+  text-align:center;
+  padding:20px;
+}
+
 #page1{background:linear-gradient(135deg,#ffb6c1,#ffc0cb);}
 #page2{background:linear-gradient(135deg,#ff69b4,#ff85c1);left:100%;color:white;}
 #page3{background:linear-gradient(135deg,#ff1493,#ff69b4);left:200%;color:white;}
 #page4{background:linear-gradient(135deg,#ffb6c1,#ff69b4);left:300%;color:white;}
-input{padding:12px;font-size:18px;border:none;border-radius:10px;text-align:center;}
-button{margin:10px;padding:12px 25px;font-size:18px;border:none;border-radius:10px;background:white;color:#ff4f81;cursor:pointer;transition:0.3s;position:relative;}
-button:hover{transform:scale(1.1);}
-h1{font-size:32px;animation:glow 1.5s infinite alternate;}
-h2{font-size:22px;margin-top:15px;}
-h3{font-size:20px;margin-top:15px;font-style:italic;}
-@keyframes glow{from{text-shadow:0 0 10px white;}to{text-shadow:0 0 20px pink;}}
 
-/* Confetti */
-.confetti{position:fixed;width:10px;height:10px;top:-10px;animation:fall 3s linear forwards;}
-@keyframes fall{to{transform:translateY(100vh) rotate(360deg);}}
+input{
+  padding:12px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  text-align:center;
+}
+
+button{
+  margin:10px;
+  padding:12px 25px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  background:white;
+  color:#ff4f81;
+  cursor:pointer;
+  transition:0.3s;
+  position:relative;
+}
+
+button:hover{transform:scale(1.1);}
+
+h1{font-size:32px;}
+h2{font-size:22px;margin-top:15px;}
+h3{font-size:20px;margin-top:20px;font-style:italic;}
 
 /* Floating hearts */
-.heart{position:fixed;bottom:-20px;font-size:20px;animation:floatUp linear infinite;opacity:0.7;}
-@keyframes floatUp{to{transform:translateY(-110vh);opacity:0;}}
+.heart-bg{
+  position:fixed;
+  bottom:-20px;
+  font-size:20px;
+  animation:floatUp linear infinite;
+  opacity:0.7;
+}
+@keyframes floatUp{
+  to{transform:translateY(-110vh);opacity:0;}
+}
 
-/* Typewriter effect */
-.typewriter{display:inline-block;overflow:hidden;border-right:.15em solid #fff;white-space:nowrap;animation:typing 3s steps(40,end), blink .75s step-end infinite;}
-@keyframes typing{from{width:0;}to{width:100%;}} @keyframes blink{50%{border-color:transparent;}}
+/* Confetti */
+.confetti{
+  position:fixed;
+  width:10px;
+  height:10px;
+  top:-10px;
+  animation:fall 3s linear forwards;
+}
+@keyframes fall{
+  to{transform:translateY(100vh) rotate(360deg);}
+}
 </style>
 </head>
+
 <body>
 
-<!-- Page 1: Name input -->
+<!-- PAGE 1 -->
 <div class="page" id="page1">
   <h2>Enter your name first 💕</h2>
   <input type="text" id="nameInput" placeholder="Your beautiful name...">
   <button onclick="goToLike()">Continue 💖</button>
 </div>
 
-<!-- Page 2: Do you like me -->
+<!-- PAGE 2 -->
 <div class="page" id="page2">
   <h1>Do you like me 😁</h1>
   <button onclick="goToHeart()">A. Yes 💖</button>
   <button id="noBtn">B. No 😌</button>
 </div>
 
-<!-- Page 3: Catch the heart -->
+<!-- PAGE 3 -->
 <div class="page" id="page3">
-  <h1>Catch the heart 💗 to continue!</h1>
+  <h1>Catch the heart 💗</h1>
   <div id="gameArea" style="position:relative;width:100%;height:50%;"></div>
-  <div id="afterCatch" style="display:none;">
-    <h2 id="oneMore">One more thing Tasmia…</h2>
-    <h2 id="line1"></h2>
-    <h2 id="line2"></h2>
-    <h2 id="line3"></h2>
-    <button id="toBirthdayBtn" style="display:none;" onclick="goToBirthday()">Continue 🎂</button>
-  </div>
+  <div id="afterCatch" style="display:none;"></div>
+  <button id="toBirthdayBtn" style="display:none;" onclick="goToBirthday()">Continue 🎂</button>
 </div>
 
-<!-- Page 4: Birthday -->
+<!-- PAGE 4 -->
 <div class="page" id="page4">
   <h1 id="birthdayText"></h1>
-  <h2 id="nicknameText"></h2>
-  <h2 id="messageText"></h2>
+  <h2>Princess ❤️</h2>
+  <h2 id="birthdayMessage"></h2>
   <h3>To my favourite person 💖</h3>
 </div>
 
 <script>
+
 let name="";
 let noBtn=document.getElementById("noBtn");
 
-// Floating hearts
+/* Floating background hearts */
 function createHeart(){
   let heart=document.createElement("div");
-  heart.classList.add("heart");
+  heart.classList.add("heart-bg");
   heart.innerHTML="💖";
   heart.style.left=Math.random()*100+"vw";
   heart.style.animationDuration=(4+Math.random()*4)+"s";
@@ -85,115 +132,126 @@ function createHeart(){
 }
 setInterval(createHeart,500);
 
-// Page transitions
+/* PAGE TRANSITIONS */
 function goToLike(){
   name=document.getElementById("nameInput").value;
-  if(name===""){alert("You have to enter your name first 😌"); return;}
+  if(name===""){alert("Enter your name first 😌");return;}
   document.getElementById("page1").style.left="-100%";
   document.getElementById("page2").style.left="0";
 }
 
+/* RUNNING NO BUTTON */
 noBtn.addEventListener("mouseover",moveButton);
 noBtn.addEventListener("click",moveButton);
+
 function moveButton(){
-  const btnWidth=noBtn.offsetWidth;
-  const btnHeight=noBtn.offsetHeight;
-  let maxX=window.innerWidth-btnWidth-10;
-  let maxY=window.innerHeight-btnHeight-10;
-  let x=Math.random()*maxX;
-  let y=Math.random()*maxY;
+  let maxX=window.innerWidth-noBtn.offsetWidth-10;
+  let maxY=window.innerHeight-noBtn.offsetHeight-10;
   noBtn.style.position="absolute";
-  noBtn.style.left=x+"px";
-  noBtn.style.top=y+"px";
+  noBtn.style.left=Math.random()*maxX+"px";
+  noBtn.style.top=Math.random()*maxY+"px";
 }
 
-// Go to heart page from Yes
 function goToHeart(){
   document.getElementById("page2").style.left="-100%";
   document.getElementById("page3").style.left="0";
   initHeartGame();
 }
 
-// Smooth moving heart mini-game
+/* SMOOTH HEART GAME */
 function initHeartGame(){
-  const gameArea = document.getElementById("gameArea");
-  gameArea.innerHTML = "";
-  const heart = document.createElement("div");
-  heart.innerHTML = "💖";
-  heart.style.position = "absolute";
-  heart.style.fontSize = "40px";
-  heart.style.cursor = "pointer";
+  const gameArea=document.getElementById("gameArea");
+  gameArea.innerHTML="";
+  const heart=document.createElement("div");
+  heart.innerHTML="💖";
+  heart.style.position="absolute";
+  heart.style.fontSize="40px";
+  heart.style.cursor="pointer";
   gameArea.appendChild(heart);
 
-  let areaW = gameArea.offsetWidth-40;
-  let areaH = gameArea.offsetHeight-40;
-  let tries=0;
+  let areaW=gameArea.offsetWidth-40;
+  let areaH=gameArea.offsetHeight-40;
   let x=Math.random()*areaW;
   let y=Math.random()*areaH;
-  heart.style.left = x+"px";
-  heart.style.top = y+"px";
+  let moves=0;
 
-  function moveHeartSmooth(){
+  function moveHeart(){
     let targetX=Math.random()*areaW;
     let targetY=Math.random()*areaH;
-    let steps=50;
+    let steps=40;
     let step=0;
-    const interval=setInterval(()=>{
+
+    let interval=setInterval(()=>{
       step++;
-      let newX=x + (targetX-x)*step/steps;
-      let newY=y + (targetY-y)*step/steps;
-      heart.style.left=newX+"px";
-      heart.style.top=newY+"px";
+      heart.style.left=x+(targetX-x)*step/steps+"px";
+      heart.style.top=y+(targetY-y)*step/steps+"px";
+
       if(step>=steps){
+        clearInterval(interval);
         x=targetX;
         y=targetY;
-        clearInterval(interval);
-        tries++;
-        if(tries<5){ moveHeartSmooth(); } // tricky first 5 tries
-        else{ moveHeartSmooth(); } // slower, easier to catch
+        moves++;
+        if(moves<5){moveHeart();}
+        else{setTimeout(moveHeart,800);}
       }
     },15);
   }
-  moveHeartSmooth();
+
+  moveHeart();
 
   heart.addEventListener("click",()=>{
-    heart.style.display="none";
-    showSupportiveLines();
+    heart.remove();
+    showLines();
   });
 }
 
-// Show supportive lines one by one
-function showSupportiveLines(){
-  document.getElementById("afterCatch").style.display="block";
+/* AFTER CATCH LINES */
+function showLines(){
+  let container=document.getElementById("afterCatch");
+  container.style.display="block";
+
   const lines=[
-    "I know you’re going through a lot… but I’m always here for you 💗",
-    "I may not be perfect, but my feelings for you are real, Tasmia 💕",
-    "I can’t fix everything… but I promise I’ll support you and stay by your side 😊"
+    "You stole my heart 💖",
+    "One more thing...",
+    "Ik ur going through a lot but im always here for youu",
+    "I am not a speacial guy like i can promise to stayy loyal foreverr tasmia💗",
+    "And lastly just stayy with me i will make your depression away😊and aita amio promisee kori madam"
   ];
+
   let i=0;
-  function showNext(){
+
+  function typeNext(){
     if(i>=lines.length){
-      document.getElementById("toBirthdayBtn").style.display="inline-block"; return;
+      document.getElementById("toBirthdayBtn").style.display="inline-block";
+      return;
     }
-    let el=document.getElementById("line"+(i+1));
-    el.innerHTML="";
+
+    let newLine=document.createElement("h2");
+    container.appendChild(newLine);
+
     let text=lines[i];
     let j=0;
-    let interval=setInterval(()=>{
-      if(j>=text.length){ clearInterval(interval); i++; setTimeout(showNext,500); return; }
-      el.innerHTML+=text[j];
+
+    let typing=setInterval(()=>{
+      if(j>=text.length){
+        clearInterval(typing);
+        i++;
+        setTimeout(typeNext,600);
+        return;
+      }
+      newLine.innerHTML+=text[j];
       j++;
-    },50);
+    },40);
   }
-  showNext();
+
+  typeNext();
 }
 
-// Birthday page
+/* BIRTHDAY PAGE */
 function goToBirthday(){
   document.getElementById("page3").style.left="-100%";
   document.getElementById("page4").style.left="0";
 
-  // Confetti
   for(let i=0;i<80;i++){
     let confetti=document.createElement("div");
     confetti.classList.add("confetti");
@@ -204,10 +262,10 @@ function goToBirthday(){
     setTimeout(()=>{confetti.remove();},4000);
   }
 
-  document.getElementById("birthdayText").innerHTML="HAPPY BIRTHDAY "+name.toUpperCase()+"!!! 🎉💖💞💕💗💘💝💓💋🥰";
-  document.getElementById("nicknameText").innerHTML="Princess ❤️";
-  document.getElementById("messageText").innerHTML="I'm so happy to meet you, every moment with you is special and makes me smile 😌💖";
+  document.getElementById("birthdayText").innerHTML="HAPPY BIRTHDAY "+name.toUpperCase()+"!!! 🎉💖💞💕💗💘";
+  document.getElementById("birthdayMessage").innerHTML="I'm so happy to meet you and every moment with you feels special 😊💗";
 }
+
 </script>
 </body>
 </html>
