@@ -12,7 +12,6 @@ body{
   color:white;
   overflow:hidden;
 }
-
 .page{
   display:none;
   height:100vh;
@@ -20,7 +19,6 @@ body{
   align-items:center;
   flex-direction:column;
 }
-
 button{
   padding:10px 20px;
   font-size:18px;
@@ -29,21 +27,23 @@ button{
   cursor:pointer;
   margin:10px;
 }
-
 #noBtn{
   position:absolute;
 }
-
 #heart{
   font-size:50px;
   position:absolute;
   cursor:pointer;
 }
-
 #afterCatch h2{
   margin:15px;
 }
-
+input{
+  padding:10px;
+  font-size:16px;
+  border-radius:10px;
+  border:none;
+}
 </style>
 </head>
 <body>
@@ -77,7 +77,6 @@ button{
 </div>
 
 <script>
-
 let userName = "";
 let tries = 0;
 
@@ -122,7 +121,6 @@ function moveHeart(){
 }
 
 function showSupportiveLines(){
-
   const lines = [
     "You stole my heart 💖",
     "One more thing",
@@ -149,12 +147,12 @@ function showSupportiveLines(){
       if(j >= text.length){
         clearInterval(interval);
         i++;
-        setTimeout(typeLine, 600);
+        setTimeout(typeLine, 400); // shorter delay between lines
         return;
       }
       newLine.innerHTML += text[j];
       j++;
-    }, 40);
+    }, 20); // faster typing
   }
 
   typeLine();
@@ -162,10 +160,10 @@ function showSupportiveLines(){
 
 function goToPage4(){
   showPage("page4");
-document.getElementById("birthdayText").innerHTML =
-"Happy Birthday " + userName + " 🎉💖<br><br>" +
-"Princess 👑<br><br>" +
-"I am veryy happy to meet you Tasmia and There are 8.3Billion people on earth but i still met youu Cutiee . I wishh you the bestt and make our every moment speacial 😊💗";
+  document.getElementById("birthdayText").innerHTML =
+    "Happy Birthday " + userName + " 🎉💖<br><br>" +
+    "Princess 👑<br><br>" +
+    "I am veryy happy to meet you Tasmia and There are 8.3Billion people on earth but i still met youu Cutiee. I wishh you the bestt and make our every moment speacial 😊💗";
 }
 </script>
 
