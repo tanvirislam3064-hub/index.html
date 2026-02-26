@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Special Surprise 💕</title>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  overflow:hidden;
+}
+
+/* Floating hearts */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  font-size:20px;
+  animation: floatUp linear infinite;
+  opacity:0.7;
+}
+
+@keyframes floatUp{
+  to{
+    transform: translateY(-110vh);
+    opacity:0;
+  }
+}
+
+.page{
+  width:100%;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  position:absolute;
+  transition:0.6s ease;
+  text-align:center;
+  padding:20px;
+}
+
+#page1{
+  background: linear-gradient(135deg,#ffb6c1,#ffc0cb);
+}
+
+#page2{
+  background: linear-gradient(135deg,#ff69b4,#ff85c1);
+  left:100%;
+  color:white;
+}
+
+#page3{
+  background: linear-gradient(135deg,#ff1493,#ff69b4);
+  left:200%;
+  color:white;
+}
+
+input{
+  padding:12px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  text-align:center;
+}
+
+button{
+  margin:10px;
+  padding:12px 25px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  background:white;
+  color:#ff4f81;
+  cursor:pointer;
+  transition:0.3s;
+  position:relative;
+}
+
+button:hover{
+  transform:scale(1.1);
+}
+
+h1{
+  font-size:32px;
+  animation: glow 1.5s infinite alternate;
+}
+
+h2{
+  font-size:22px;
+  margin-top:15px;
+}
+
+h3{
+  font-size:20px;
+  margin-top:15px;
+  font-style:italic;
+}
+
+@keyframes glow{
+  from{ text-shadow:0 0 10px white;}
+  to{ text-shadow:0 0 20px pink;}
+}
+
+/* Confetti */
+.confetti{
+  position:fixed;
+  width:10px;
+  height:10px;
+  top:-10px;
+  animation: fall 3s linear forwards;
+}
+
+@keyframes fall{
+  to{
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page" id="page1">
+  <h2>Enter your name first 💕</h2>
+  <input type="text" id="nameInput" placeholder="Your beautiful name...">
+  <button onclick="goToQuestion()">Continue 💖</button>
+</div>
+
+<div class="page" id="page2">
+  <h1>Do you like me 😁</h1>
+  <button onclick="celebrate()">A. Yes 💖</button>
+  <button id="noBtn">B. No 😌</button>
+</div>
+
+<div class="page" id="page3">
+  <h1 id="birthdayText"></h1>
+  <h2 id="messageText"></h2>
+  <h3>To my favourite person 💖</h3>
+</div>
+
+<script>
+let name = "";
+let noBtn = document.getElementById("noBtn");
+
+/* Floating hearts generator */
+function createHeart(){
+  let heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML = "💖";
+  heart.style.left = Math.random()*100 + "vw";
+  heart.style.animationDuration = (4 + Math.random()*4) + "s";
+  heart.style.fontSize = (15 + Math.random()*20) + "px";
+  document.body.appendChild(heart);
+
+  setTimeout(()=>{ heart.remove(); },8000);
+}
+
+setInterval(createHeart, 500);
+
+function goToQuestion(){
+  name = document.getElementById("nameInput").value;
+
+  if(name === ""){
+    alert("You have to enter your name first 😌");
+    return;
+  }
+
+  document.getElementById("page1").style.left = "-100%";
+  document.getElementById("page2").style.left = "0";
+}
+
+/* No button runs away properly */
+noBtn.addEventListener("mouseover", moveButton);
+noBtn.addEventListener("click", moveButton);
+
+function moveButton(){
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
+
+  let maxX = window.innerWidth - btnWidth - 10;
+  let maxY = window.innerHeight - btnHeight - 10;
+
+  let x = Math.random() * maxX;
+  let y = Math.random() * maxY;
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+/* Confetti + Birthday */
+function celebrate(){
+
+  for(let i=0; i<80; i++){
+    let confetti = document.createElement("div");
+    confetti.classList.add("confetti");
+    confetti.style.left = Math.random()*100 + "vw";
+    confetti.style.backgroundColor =
+      "hsl(" + Math.random()*360 + ", 100%, 50%)";
+    confetti.style.animationDuration = (2 + Math.random()*2) + "s";
+    document.body.appendChild(confetti);
+
+    setTimeout(()=>{ confetti.remove(); },4000);
+  }
+
+  setTimeout(()=>{
+    document.getElementById("birthdayText").innerHTML =
+      "HAPPY BIRTHDAY " + name.toUpperCase() + "!!! 🎉💖💞💕💗💘💝💓🥰";
+
+    document.getElementById("messageText").innerHTML =
+      "I'm so happy to meet you, every moment with you is special and makes me smile 😌💖";
+
+    document.getElementById("page2").style.left = "-100%";
+    document.getElementById("page3").style.left = "0";
+  },1000);
+}
+</script>
+
+</body>
+</html>
