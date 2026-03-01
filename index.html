@@ -8,7 +8,7 @@ body{
   margin:0;
   font-family: Arial, sans-serif;
   text-align:center;
-  color:white;
+  color:black; /* changed from white */
   overflow:hidden;
 }
 
@@ -28,20 +28,16 @@ button{
   border-radius:20px;
   cursor:pointer;
   margin:10px;
+  color:black; /* button text black */
+  background:white; /* make it visible on pink backgrounds */
 }
 
-#noBtn{
-  position:absolute;
-}
-
-#heart{
-  font-size:50px;
-  position:absolute;
-  cursor:pointer;
-}
-
-#afterCatch h2{
-  margin:15px;
+input{
+  padding:10px;
+  font-size:16px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  color:black; /* input text black */
 }
 
 /* Page 1 pink & hearts */
@@ -70,20 +66,10 @@ button{
   opacity:0.8;
 }
 
-@keyframes float{
-  0%{transform: translateY(100vh);}
-  100%{transform: translateY(-10vh);}
-}
-
 /* Pulsing cake */
 .bigCake{
   font-size:80px;
   animation: pulse 1s infinite alternate;
-}
-
-@keyframes pulse{
-  from { transform: scale(1); }
-  to { transform: scale(1.3); }
 }
 
 /* Party poppers */
@@ -93,11 +79,6 @@ button{
   animation: fall 3s linear infinite;
 }
 
-@keyframes fall{
-  0%{transform: translateY(-10vh);}
-  100%{transform: translateY(100vh);}
-}
-
 /* Birthday extra texts */
 #birthdayExtraText{
   position:absolute;
@@ -105,15 +86,19 @@ button{
   width:80%;
   font-size:20px;
   line-height:1.4;
-  color:white;
+  color:black; /* text black */
   font-weight:bold;
-  text-shadow: 0 0 10px #ffebf5;
+  text-shadow: 0 0 5px #fff; /* slight white glow for visibility */
 }
 
 /* Page 5 */
 #page5{
   background: radial-gradient(circle,#ff9ec4,#ff4fa3,#ff1493);
   overflow:hidden;
+}
+
+h1,h2,p,span{
+  color:black; /* make all headings and normal text black */
 }
 </style>
 </head>
@@ -241,7 +226,6 @@ function goToPage4(){
   showPage("page4");
   document.getElementById("birthdayText").innerHTML = "Happy Birthday " + userName + " 🎉💖";
 
-  // play music
   const music = document.getElementById("birthdayMusic");
   music.currentTime = 0;
   music.volume = 0.6;
@@ -250,13 +234,11 @@ function goToPage4(){
   const page = document.getElementById("page4");
   page.querySelectorAll(".floatingHeart, .popper, .bigCake").forEach(e=>e.remove());
 
-  // pulsing cake
   const cake = document.createElement("div");
   cake.className = "bigCake";
   cake.innerHTML = "🎂";
   page.appendChild(cake);
 
-  // floating hearts
   for(let i=0;i<20;i++){
     let heart = document.createElement("div");
     heart.className="floatingHeart";
@@ -268,7 +250,6 @@ function goToPage4(){
     page.appendChild(heart);
   }
 
-  // party poppers
   for(let i=0;i<25;i++){
     let pop = document.createElement("div");
     pop.className="popper";
@@ -284,7 +265,6 @@ function goToPage5(){
   const page = document.getElementById("page5");
   page.querySelectorAll(".floatingHeart, .popper").forEach(e=>e.remove());
 
-  // floating hearts
   for(let h=0; h<25; h++){
     let heart=document.createElement("div");
     heart.className="floatingHeart";
@@ -295,7 +275,6 @@ function goToPage5(){
     page.appendChild(heart);
   }
 
-  // party poppers
   for(let i=0;i<30;i++){
     let pop=document.createElement("div");
     pop.className="popper";
@@ -305,7 +284,6 @@ function goToPage5(){
     page.appendChild(pop);
   }
 
-  // Friendship Day typing
   let title="Happy Friendship Day ❤️";
   let i=0;
   function typeTitle(){
