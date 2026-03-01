@@ -140,14 +140,14 @@ button{
 <!-- PAGE 3 -->
 <div class="page" id="page3">
   <h1>Catch the Heart ❤️</h1>
-  <div id="heart">❤️</div>
+  <div id="heart"></div>
   <div id="afterCatch"></div>
   <button id="toBirthdayBtn" onclick="goToPage4()" style="display:none;">Next 💝</button>
 </div>
 
 <!-- PAGE 4 -->
 <div class="page" id="page4">
-  <h1>🎂 Happy Birthday 🎂</h1>
+  <h1></h1>
   <h2 id="birthdayText"></h2>
   <div id="birthdayExtraText">
     Happy birthdayy Tasmiaa ❤️<br>
@@ -175,7 +175,7 @@ function showPage(id){
 function goToPage2(){
   userName = document.getElementById("nameInput").value;
   if(userName.trim() === "") return;
-  document.getElementById("questionText").innerHTML = userName + ", Do you like me? 😁😁";
+  document.getElementById("questionText").innerHTML = userName + ", Do you like me? ";
   showPage("page2");
 }
 
