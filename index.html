@@ -8,7 +8,7 @@ body{
   margin:0;
   font-family: Arial, sans-serif;
   text-align:center;
-  color:black; /* changed from white */
+  color:black;
   overflow:hidden;
 }
 
@@ -28,8 +28,8 @@ button{
   border-radius:20px;
   cursor:pointer;
   margin:10px;
-  color:black; /* button text black */
-  background:white; /* make it visible on pink backgrounds */
+  color:black;
+  background:white;
 }
 
 input{
@@ -37,58 +37,18 @@ input{
   font-size:16px;
   border-radius:10px;
   border:1px solid #ccc;
-  color:black; /* input text black */
+  color:black;
 }
 
-/* Page 1 pink & hearts */
+/* Page 1 */
 #page1{
   background: radial-gradient(circle,#ffb6c1,#ff69b4,#ff1493);
 }
 
-/* Birthday page animations */
+/* Page 4 */
 #page4{
   background: linear-gradient(135deg,#ffb6c1,#ff69b4,#ff1493);
-  animation: bgMove 10s ease-in-out infinite alternate;
   overflow:hidden;
-}
-
-@keyframes bgMove{
-  0%{background: linear-gradient(135deg,#ffb6c1,#ff69b4,#ff1493);}
-  50%{background: linear-gradient(135deg,#ff9ec4,#ff4fa3,#ff1493);}
-  100%{background: linear-gradient(135deg,#ffb6c1,#ff69b4,#ff1493);}
-}
-
-/* Floating hearts */
-.floatingHeart{
-  position:absolute;
-  font-size:20px;
-  animation: float 5s linear infinite;
-  opacity:0.8;
-}
-
-/* Pulsing cake */
-.bigCake{
-  font-size:80px;
-  animation: pulse 1s infinite alternate;
-}
-
-/* Party poppers */
-.popper{
-  position:absolute;
-  font-size:25px;
-  animation: fall 3s linear infinite;
-}
-
-/* Birthday extra texts */
-#birthdayExtraText{
-  position:absolute;
-  top:30%;
-  width:80%;
-  font-size:20px;
-  line-height:1.4;
-  color:black; /* text black */
-  font-weight:bold;
-  text-shadow: 0 0 5px #fff; /* slight white glow for visibility */
 }
 
 /* Page 5 */
@@ -97,16 +57,27 @@ input{
   overflow:hidden;
 }
 
-h1,h2,p,span{
-  color:black; /* make all headings and normal text black */
+/* Floating heart animation */
+.floatingHeart{
+  position:absolute;
+  font-size:20px;
+  animation: float 5s linear infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(-100vh);}
+}
+
+/* Movable heart */
+#heart{
+  position:absolute;
+  font-size:50px;
+  cursor:pointer;
 }
 </style>
 </head>
 <body>
-
-<audio id="birthdayMusic" preload="auto">
-  <source src="birthday.mp3" type="audio/mpeg">
-</audio>
 
 <!-- PAGE 1 -->
 <div class="page" id="page1" style="display:flex;">
@@ -119,13 +90,13 @@ h1,h2,p,span{
 <div class="page" id="page2">
   <h1 id="questionText"></h1>
   <button onclick="goToPage3()">Yes 😁</button>
-  <button id="noBtn" onmouseover="moveNo()">No 😜</button>
+  <button id="noBtn">No 😜</button>
 </div>
 
 <!-- PAGE 3 -->
 <div class="page" id="page3">
   <h1>Catch the Heart ❤️</h1>
-  <div id="heart"></div>
+  <div id="heart">❤️</div>
   <div id="afterCatch"></div>
   <button id="toBirthdayBtn" onclick="goToPage4()" style="display:none;">Next 💝</button>
 </div>
@@ -150,46 +121,62 @@ h1,h2,p,span{
 
 <script>
 let userName = "";
-let tries = 0;
+let heartMoveInterval;
 
+/* Page Switch */
 function showPage(id){
   document.querySelectorAll(".page").forEach(p=>p.style.display="none");
   document.getElementById(id).style.display="flex";
 }
 
+/* Page 2 */
 function goToPage2(){
   userName = document.getElementById("nameInput").value;
   if(userName.trim() === "") return;
   document.getElementById("questionText").innerHTML = userName + ", Do you like me? ";
   showPage("page2");
+
+  const noBtn = document.getElementById("noBtn");
+
+  function moveNo(){
+    noBtn.style.position="absolute";
+    noBtn.style.top = Math.random()*80 + "%";
+    noBtn.style.left = Math.random()*80 + "%";
+  }
+
+  noBtn.addEventListener("mouseover", moveNo);
+  noBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    moveNo();
+  });
 }
 
-function moveNo(){
-  let btn = document.getElementById("noBtn");
-  btn.style.top = Math.random()*80 + "%";
-  btn.style.left = Math.random()*80 + "%";
-}
-
+/* Page 3 */
 function goToPage3(){
   showPage("page3");
   moveHeart();
 }
 
 function moveHeart(){
-  let heart = document.getElementById("heart");
-  heart.onclick = function(){
-    showSupportiveLines();
-    heart.style.display="none";
+  const heart = document.getElementById("heart");
+
+  function randomMove(){
+    heart.style.top = Math.random()*80 + "%";
+    heart.style.left = Math.random()*80 + "%";
   }
-  heart.onmouseover = function(){
-    tries++;
-    if(tries < 6){
-      heart.style.top = Math.random()*80 + "%";
-      heart.style.left = Math.random()*80 + "%";
-    }
+
+  randomMove();
+
+  heartMoveInterval = setInterval(randomMove, 800);
+
+  heart.onclick = function(){
+    clearInterval(heartMoveInterval);
+    heart.style.display="none";
+    showSupportiveLines();
   }
 }
 
+/* Typing Lines */
 function showSupportiveLines(){
   const lines = [
     "You stole my heart 💖",
@@ -198,16 +185,21 @@ function showSupportiveLines(){
     "I am not a speacial guy like i can promise to stayy loyal foreverr tasmia💗",
     "And lastly just stayy with me i will make your depression away😊and aita amio promisee kori madam"
   ];
+
   let i = 0;
+
   function typeLine(){
     if(i >= lines.length){
       document.getElementById("toBirthdayBtn").style.display="inline-block";
       return;
     }
+
     let newLine = document.createElement("h2");
     document.getElementById("afterCatch").appendChild(newLine);
+
     let text = lines[i];
     let j = 0;
+
     let interval = setInterval(()=>{
       if(j >= text.length){
         clearInterval(interval);
@@ -219,73 +211,23 @@ function showSupportiveLines(){
       j++;
     }, 40);
   }
+
   typeLine();
 }
 
+/* Page 4 */
 function goToPage4(){
   showPage("page4");
   document.getElementById("birthdayText").innerHTML = "Happy Birthday " + userName + " 🎉💖";
-
-  const music = document.getElementById("birthdayMusic");
-  music.currentTime = 0;
-  music.volume = 0.6;
-  music.play().catch(()=>{});
-
-  const page = document.getElementById("page4");
-  page.querySelectorAll(".floatingHeart, .popper, .bigCake").forEach(e=>e.remove());
-
-  const cake = document.createElement("div");
-  cake.className = "bigCake";
-  cake.innerHTML = "🎂";
-  page.appendChild(cake);
-
-  for(let i=0;i<20;i++){
-    let heart = document.createElement("div");
-    heart.className="floatingHeart";
-    heart.innerHTML="💖";
-    heart.style.left = Math.random()*100+"vw";
-    heart.style.top = Math.random()*80+"vh";
-    heart.style.fontSize = (15 + Math.random()*25)+"px";
-    heart.style.animationDuration = (4 + Math.random()*4)+"s";
-    page.appendChild(heart);
-  }
-
-  for(let i=0;i<25;i++){
-    let pop = document.createElement("div");
-    pop.className="popper";
-    pop.innerHTML="🎉";
-    pop.style.left = Math.random()*100+"vw";
-    pop.style.animationDuration = (2+Math.random()*3)+"s";
-    page.appendChild(pop);
-  }
 }
 
+/* Page 5 */
 function goToPage5(){
   showPage("page5");
-  const page = document.getElementById("page5");
-  page.querySelectorAll(".floatingHeart, .popper").forEach(e=>e.remove());
-
-  for(let h=0; h<25; h++){
-    let heart=document.createElement("div");
-    heart.className="floatingHeart";
-    heart.innerHTML="💖";
-    heart.style.left=Math.random()*100+"vw";
-    heart.style.fontSize=(15+Math.random()*25)+"px";
-    heart.style.animationDuration=(4+Math.random()*4)+"s";
-    page.appendChild(heart);
-  }
-
-  for(let i=0;i<30;i++){
-    let pop=document.createElement("div");
-    pop.className="popper";
-    pop.innerHTML="🎉";
-    pop.style.left=Math.random()*100+"vw";
-    pop.style.animationDuration=(2+Math.random()*3)+"s";
-    page.appendChild(pop);
-  }
 
   let title="Happy Friendship Day ❤️";
   let i=0;
+
   function typeTitle(){
     if(i<title.length){
       document.getElementById("friendshipTitle").innerHTML+=title.charAt(i);
