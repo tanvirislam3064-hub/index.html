@@ -2,13 +2,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>For You 💖</title>
+<title>For My Favourite Person 💖</title>
 <style>
 body{
   margin:0;
   font-family: Arial, sans-serif;
   text-align:center;
-  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
   color:white;
   overflow:hidden;
 }
@@ -45,16 +44,30 @@ button{
   margin:15px;
 }
 
-/* PAGE 5 STYLE */
-#page5{
-  background: radial-gradient(circle,#ff9ec4,#ff4fa3,#ff1493);
+/* Page 1 pink & hearts */
+#page1{
+  background: radial-gradient(circle,#ffb6c1,#ff69b4,#ff1493);
+}
+
+/* Birthday page animations */
+#page4{
+  background: linear-gradient(135deg,#ffb6c1,#ff69b4,#ff1493);
+  animation: bgMove 10s ease-in-out infinite alternate;
   overflow:hidden;
 }
 
+@keyframes bgMove{
+  0%{background: linear-gradient(135deg,#ffb6c1,#ff69b4,#ff1493);}
+  50%{background: linear-gradient(135deg,#ff9ec4,#ff4fa3,#ff1493);}
+  100%{background: linear-gradient(135deg,#ffb6c1,#ff69b4,#ff1493);}
+}
+
+/* Floating hearts */
 .floatingHeart{
   position:absolute;
-  animation: float 6s linear infinite;
-  opacity:0.7;
+  font-size:20px;
+  animation: float 5s linear infinite;
+  opacity:0.8;
 }
 
 @keyframes float{
@@ -62,6 +75,18 @@ button{
   100%{transform: translateY(-10vh);}
 }
 
+/* Pulsing cake */
+.bigCake{
+  font-size:80px;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse{
+  from { transform: scale(1); }
+  to { transform: scale(1.3); }
+}
+
+/* Party poppers */
 .popper{
   position:absolute;
   font-size:25px;
@@ -73,6 +98,23 @@ button{
   100%{transform: translateY(100vh);}
 }
 
+/* Birthday extra texts */
+#birthdayExtraText{
+  position:absolute;
+  top:30%;
+  width:80%;
+  font-size:20px;
+  line-height:1.4;
+  color:white;
+  font-weight:bold;
+  text-shadow: 0 0 10px #ffebf5;
+}
+
+/* Page 5 */
+#page5{
+  background: radial-gradient(circle,#ff9ec4,#ff4fa3,#ff1493);
+  overflow:hidden;
+}
 </style>
 </head>
 <body>
@@ -107,6 +149,11 @@ button{
 <div class="page" id="page4">
   <h1>🎂 Happy Birthday 🎂</h1>
   <h2 id="birthdayText"></h2>
+  <div id="birthdayExtraText">
+    Happy birthdayy Tasmiaa ❤️<br>
+    Heress my littlee workk hehe >-< hopee tmi likee korba.<br>
+    anywayss many wishess forr youu 💖
+  </div>
   <button onclick="goToPage5()">Next 💖</button>
 </div>
 
@@ -117,7 +164,6 @@ button{
 </div>
 
 <script>
-
 let userName = "";
 let tries = 0;
 
@@ -146,12 +192,10 @@ function goToPage3(){
 
 function moveHeart(){
   let heart = document.getElementById("heart");
-
   heart.onclick = function(){
     showSupportiveLines();
     heart.style.display="none";
   }
-
   heart.onmouseover = function(){
     tries++;
     if(tries < 6){
@@ -162,7 +206,6 @@ function moveHeart(){
 }
 
 function showSupportiveLines(){
-
   const lines = [
     "You stole my heart 💖",
     "One more thing",
@@ -170,21 +213,16 @@ function showSupportiveLines(){
     "I am not a speacial guy like i can promise to stayy loyal foreverr tasmia💗",
     "And lastly just stayy with me i will make your depression away😊and aita amio promisee kori madam"
   ];
-
   let i = 0;
-
   function typeLine(){
     if(i >= lines.length){
       document.getElementById("toBirthdayBtn").style.display="inline-block";
       return;
     }
-
     let newLine = document.createElement("h2");
     document.getElementById("afterCatch").appendChild(newLine);
-
     let text = lines[i];
     let j = 0;
-
     let interval = setInterval(()=>{
       if(j >= text.length){
         clearInterval(interval);
@@ -196,7 +234,6 @@ function showSupportiveLines(){
       j++;
     }, 40);
   }
-
   typeLine();
 }
 
@@ -204,14 +241,48 @@ function goToPage4(){
   showPage("page4");
   document.getElementById("birthdayText").innerHTML = "Happy Birthday " + userName + " 🎉💖";
 
+  // play music
   const music = document.getElementById("birthdayMusic");
   music.currentTime = 0;
   music.volume = 0.6;
-  music.play().catch(function(e){});
+  music.play().catch(()=>{});
+
+  const page = document.getElementById("page4");
+  page.querySelectorAll(".floatingHeart, .popper, .bigCake").forEach(e=>e.remove());
+
+  // pulsing cake
+  const cake = document.createElement("div");
+  cake.className = "bigCake";
+  cake.innerHTML = "🎂";
+  page.appendChild(cake);
+
+  // floating hearts
+  for(let i=0;i<20;i++){
+    let heart = document.createElement("div");
+    heart.className="floatingHeart";
+    heart.innerHTML="💖";
+    heart.style.left = Math.random()*100+"vw";
+    heart.style.top = Math.random()*80+"vh";
+    heart.style.fontSize = (15 + Math.random()*25)+"px";
+    heart.style.animationDuration = (4 + Math.random()*4)+"s";
+    page.appendChild(heart);
+  }
+
+  // party poppers
+  for(let i=0;i<25;i++){
+    let pop = document.createElement("div");
+    pop.className="popper";
+    pop.innerHTML="🎉";
+    pop.style.left = Math.random()*100+"vw";
+    pop.style.animationDuration = (2+Math.random()*3)+"s";
+    page.appendChild(pop);
+  }
 }
 
 function goToPage5(){
   showPage("page5");
+  const page = document.getElementById("page5");
+  page.querySelectorAll(".floatingHeart, .popper").forEach(e=>e.remove());
 
   // floating hearts
   for(let h=0; h<25; h++){
@@ -221,7 +292,7 @@ function goToPage5(){
     heart.style.left=Math.random()*100+"vw";
     heart.style.fontSize=(15+Math.random()*25)+"px";
     heart.style.animationDuration=(4+Math.random()*4)+"s";
-    document.getElementById("page5").appendChild(heart);
+    page.appendChild(heart);
   }
 
   // party poppers
@@ -231,12 +302,12 @@ function goToPage5(){
     pop.innerHTML="🎉";
     pop.style.left=Math.random()*100+"vw";
     pop.style.animationDuration=(2+Math.random()*3)+"s";
-    document.getElementById("page5").appendChild(pop);
+    page.appendChild(pop);
   }
 
+  // Friendship Day typing
   let title="Happy Friendship Day ❤️";
   let i=0;
-
   function typeTitle(){
     if(i<title.length){
       document.getElementById("friendshipTitle").innerHTML+=title.charAt(i);
@@ -246,13 +317,11 @@ function goToPage5(){
       typeMessage();
     }
   }
-
   typeTitle();
 
   function typeMessage(){
     let text="Im reallly luckyy to have you madam 🥰 taii jemon tmi amrr kase speacial person temnii tmii khub matter koro amr kase ar tmr kotha o matter koree . tai kokhono na je tmr kotha omanno korbo🥰 . akhnn jevabee tmr sob ee like korii sarajibonn o same oivabeii krbo Promise🫶";
     let j=0;
-
     function typing(){
       if(j<text.length){
         document.getElementById("friendshipMessage").innerHTML+=text.charAt(j);
@@ -260,11 +329,9 @@ function goToPage5(){
         setTimeout(typing,40);
       }
     }
-
     typing();
   }
 }
-
 </script>
 
 </body>
