@@ -45,10 +45,63 @@ input{
   background: radial-gradient(circle,#ffb6c1,#ff69b4,#ff1493);
 }
 
-/* Page 4 */
+/* Page 2 pink */
+#page2{
+  background: radial-gradient(circle,#ffb6c1,#ff69b4,#ff1493);
+}
+
+/* Page 3 pink */
+#page3{
+  background: radial-gradient(circle,#ffb6c1,#ff69b4,#ff1493);
+}
+
+/* Birthday page */
 #page4{
   background: linear-gradient(135deg,#ffb6c1,#ff69b4,#ff1493);
+  animation: bgMove 10s ease-in-out infinite alternate;
   overflow:hidden;
+}
+
+@keyframes bgMove{
+  0%{background: linear-gradient(135deg,#ffb6c1,#ff69b4,#ff1493);}
+  50%{background: linear-gradient(135deg,#ff9ec4,#ff4fa3,#ff1493);}
+  100%{background: linear-gradient(135deg,#ffb6c1,#ff69b4,#ff1493);}
+}
+
+/* Floating hearts */
+.floatingHeart{
+  position:absolute;
+  font-size:20px;
+  animation: float 5s linear infinite;
+  opacity:0.8;
+}
+
+@keyframes float{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(-100vh);}
+}
+
+/* Cake */
+.bigCake{
+  font-size:80px;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse{
+  from{transform:scale(1);}
+  to{transform:scale(1.1);}
+}
+
+/* Party poppers */
+.popper{
+  position:absolute;
+  font-size:25px;
+  animation: fall 3s linear infinite;
+}
+
+@keyframes fall{
+  0%{transform:translateY(-50px);}
+  100%{transform:translateY(100vh);}
 }
 
 /* Page 5 */
@@ -57,19 +110,10 @@ input{
   overflow:hidden;
 }
 
-/* Floating heart animation */
-.floatingHeart{
-  position:absolute;
-  font-size:20px;
-  animation: float 5s linear infinite;
+h1,h2,p,span{
+  color:black;
 }
 
-@keyframes float{
-  0%{transform:translateY(0);}
-  100%{transform:translateY(-100vh);}
-}
-
-/* Movable heart */
 #heart{
   position:absolute;
   font-size:50px;
@@ -78,6 +122,10 @@ input{
 </style>
 </head>
 <body>
+
+<audio id="birthdayMusic" preload="auto">
+  <source src="birthday.mp3" type="audio/mpeg">
+</audio>
 
 <!-- PAGE 1 -->
 <div class="page" id="page1" style="display:flex;">
@@ -90,7 +138,7 @@ input{
 <div class="page" id="page2">
   <h1 id="questionText"></h1>
   <button onclick="goToPage3()">Yes 😁</button>
-  <button id="noBtn">No 😜</button>
+  <button id="noBtn" onmouseover="moveNo()">No 😜</button>
 </div>
 
 <!-- PAGE 3 -->
@@ -103,7 +151,6 @@ input{
 
 <!-- PAGE 4 -->
 <div class="page" id="page4">
-  <h1></h1>
   <h2 id="birthdayText"></h2>
   <div id="birthdayExtraText">
     Happy birthdayy Tasmiaa ❤️<br>
@@ -121,62 +168,49 @@ input{
 
 <script>
 let userName = "";
-let heartMoveInterval;
+let tries = 0;
 
-/* Page Switch */
 function showPage(id){
   document.querySelectorAll(".page").forEach(p=>p.style.display="none");
   document.getElementById(id).style.display="flex";
 }
 
-/* Page 2 */
 function goToPage2(){
   userName = document.getElementById("nameInput").value;
   if(userName.trim() === "") return;
   document.getElementById("questionText").innerHTML = userName + ", Do you like me? ";
   showPage("page2");
-
-  const noBtn = document.getElementById("noBtn");
-
-  function moveNo(){
-    noBtn.style.position="absolute";
-    noBtn.style.top = Math.random()*80 + "%";
-    noBtn.style.left = Math.random()*80 + "%";
-  }
-
-  noBtn.addEventListener("mouseover", moveNo);
-  noBtn.addEventListener("click", function(e){
-    e.preventDefault();
-    moveNo();
-  });
 }
 
-/* Page 3 */
+function moveNo(){
+  let btn = document.getElementById("noBtn");
+  btn.style.position="absolute";
+  btn.style.top = Math.random()*80 + "%";
+  btn.style.left = Math.random()*80 + "%";
+}
+
 function goToPage3(){
   showPage("page3");
   moveHeart();
 }
 
 function moveHeart(){
-  const heart = document.getElementById("heart");
-
-  function randomMove(){
-    heart.style.top = Math.random()*80 + "%";
-    heart.style.left = Math.random()*80 + "%";
-  }
-
-  randomMove();
-
-  heartMoveInterval = setInterval(randomMove, 800);
+  let heart = document.getElementById("heart");
 
   heart.onclick = function(){
-    clearInterval(heartMoveInterval);
-    heart.style.display="none";
     showSupportiveLines();
+    heart.style.display="none";
+  }
+
+  heart.onmouseover = function(){
+    tries++;
+    if(tries < 6){
+      heart.style.top = Math.random()*80 + "%";
+      heart.style.left = Math.random()*80 + "%";
+    }
   }
 }
 
-/* Typing Lines */
 function showSupportiveLines(){
   const lines = [
     "You stole my heart 💖",
@@ -185,21 +219,16 @@ function showSupportiveLines(){
     "I am not a speacial guy like i can promise to stayy loyal foreverr tasmia💗",
     "And lastly just stayy with me i will make your depression away😊and aita amio promisee kori madam"
   ];
-
   let i = 0;
-
   function typeLine(){
     if(i >= lines.length){
       document.getElementById("toBirthdayBtn").style.display="inline-block";
       return;
     }
-
     let newLine = document.createElement("h2");
     document.getElementById("afterCatch").appendChild(newLine);
-
     let text = lines[i];
     let j = 0;
-
     let interval = setInterval(()=>{
       if(j >= text.length){
         clearInterval(interval);
@@ -211,23 +240,52 @@ function showSupportiveLines(){
       j++;
     }, 40);
   }
-
   typeLine();
 }
 
-/* Page 4 */
 function goToPage4(){
   showPage("page4");
   document.getElementById("birthdayText").innerHTML = "Happy Birthday " + userName + " 🎉💖";
+
+  const music = document.getElementById("birthdayMusic");
+  music.currentTime = 0;
+  music.volume = 0.6;
+  music.play().catch(()=>{});
+
+  const page = document.getElementById("page4");
+  page.querySelectorAll(".floatingHeart, .popper, .bigCake").forEach(e=>e.remove());
+
+  const cake = document.createElement("div");
+  cake.className = "bigCake";
+  cake.innerHTML = "🎂";
+  page.appendChild(cake);
+
+  for(let i=0;i<20;i++){
+    let heart = document.createElement("div");
+    heart.className="floatingHeart";
+    heart.innerHTML="💖";
+    heart.style.left = Math.random()*100+"vw";
+    heart.style.top = Math.random()*80+"vh";
+    heart.style.fontSize = (15 + Math.random()*25)+"px";
+    heart.style.animationDuration = (4 + Math.random()*4)+"s";
+    page.appendChild(heart);
+  }
+
+  for(let i=0;i<25;i++){
+    let pop = document.createElement("div");
+    pop.className="popper";
+    pop.innerHTML="🎉";
+    pop.style.left = Math.random()*100+"vw";
+    pop.style.animationDuration = (2+Math.random()*3)+"s";
+    page.appendChild(pop);
+  }
 }
 
-/* Page 5 */
 function goToPage5(){
   showPage("page5");
 
   let title="Happy Friendship Day ❤️";
   let i=0;
-
   function typeTitle(){
     if(i<title.length){
       document.getElementById("friendshipTitle").innerHTML+=title.charAt(i);
