@@ -3,107 +3,265 @@
 <head>
 <meta charset="UTF-8">
 <title>For You 💖</title>
-
 <style>
 body{
   margin:0;
   font-family: Arial, sans-serif;
   text-align:center;
-  overflow:hidden;
-  transition:1s;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
   color:white;
+  overflow:hidden;
 }
 
-.page1{background: linear-gradient(135deg,#ff9a9e,#fecfef,#ffdde1);}
-.page2{background: linear-gradient(135deg,#ff758c,#ff7eb3);}
-.page3{background: linear-gradient(135deg,#f6d365,#fda085);}
-.page4{background: radial-gradient(circle,#ffb6c1,#ff69b4,#ff1493);}
-.page5{background: radial-gradient(circle,#ff9ec4,#ff4fa3,#ff1493);}
-
-.page{display:none; padding-top:100px;}
-.active{display:block;}
+.page{
+  display:none;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  position:relative;
+}
 
 button{
-  padding:12px 25px;
+  padding:10px 20px;
+  font-size:18px;
   border:none;
-  border-radius:25px;
-  background:white;
-  color:#ff1493;
-  font-weight:bold;
+  border-radius:20px;
   cursor:pointer;
-  margin-top:20px;
-  font-size:16px;
+  margin:10px;
 }
 
-.bigHeart{
-  font-size:90px;
-  animation: pulse 1s infinite alternate;
+#noBtn{
+  position:absolute;
 }
 
-@keyframes pulse{
-  from{transform:scale(1);}
-  to{transform:scale(1.2);}
+#heart{
+  font-size:50px;
+  position:absolute;
+  cursor:pointer;
 }
+
+#afterCatch h2{
+  margin:15px;
+}
+
+/* PAGE 5 STYLE */
+#page5{
+  background: radial-gradient(circle,#ff9ec4,#ff4fa3,#ff1493);
+  overflow:hidden;
+}
+
+.floatingHeart{
+  position:absolute;
+  animation: float 6s linear infinite;
+  opacity:0.7;
+}
+
+@keyframes float{
+  0%{transform: translateY(100vh);}
+  100%{transform: translateY(-10vh);}
+}
+
+.popper{
+  position:absolute;
+  font-size:25px;
+  animation: fall 3s linear infinite;
+}
+
+@keyframes fall{
+  0%{transform: translateY(-10vh);}
+  100%{transform: translateY(100vh);}
+}
+
 </style>
 </head>
+<body>
 
-<body class="page1">
-
-<!-- AUDIO -->
-<audio id="birthdayMusic" src="birthday.mp3"></audio>
+<audio id="birthdayMusic" preload="auto">
+  <source src="birthday.mp3" type="audio/mpeg">
+</audio>
 
 <!-- PAGE 1 -->
-<div id="p1" class="page active">
-  <h1>Enter Your Name 💖</h1>
-  <input type="text" id="nameInput" placeholder="Your Name">
-  <br>
-  <button onclick="nextPage(2)">Continue</button>
+<div class="page" id="page1" style="display:flex;">
+  <h1>Enter Your Name 💕</h1>
+  <input type="text" id="nameInput" placeholder="Your name">
+  <button onclick="goToPage2()">Next</button>
 </div>
 
 <!-- PAGE 2 -->
-<div id="p2" class="page">
-  <h2>You are very special 💕</h2>
-  <button onclick="nextPage(3)">Next</button>
+<div class="page" id="page2">
+  <h1 id="questionText"></h1>
+  <button onclick="goToPage3()">Yes 😁</button>
+  <button id="noBtn" onmouseover="moveNo()">No 😜</button>
 </div>
 
 <!-- PAGE 3 -->
-<div id="p3" class="page">
-  <h2>Someone has a surprise for you 😌</h2>
-  <button onclick="nextPage(4)">Next</button>
+<div class="page" id="page3">
+  <h1>Catch the Heart ❤️</h1>
+  <div id="heart">❤️</div>
+  <div id="afterCatch"></div>
+  <button id="toBirthdayBtn" onclick="goToPage4()" style="display:none;">Next 💝</button>
 </div>
 
-<!-- PAGE 4 (BIRTHDAY PAGE) -->
-<div id="p4" class="page">
-  <div class="bigHeart">🎂</div>
-  <h1>Happy Birthday Dear 💖</h1>
-  <button onclick="nextPage(5)">Next</button>
+<!-- PAGE 4 -->
+<div class="page" id="page4">
+  <h1>🎂 Happy Birthday 🎂</h1>
+  <h2 id="birthdayText"></h2>
+  <button onclick="goToPage5()">Next 💖</button>
 </div>
 
 <!-- PAGE 5 -->
-<div id="p5" class="page">
-  <h1>Happy Friendship Day ❤️</h1>
+<div class="page" id="page5">
+  <h1 id="friendshipTitle"></h1>
+  <h2 id="friendshipMessage" style="width:80%;"></h2>
 </div>
 
 <script>
 
-function nextPage(num){
-  let pages=document.querySelectorAll(".page");
-  pages.forEach(p=>p.classList.remove("active"));
+let userName = "";
+let tries = 0;
 
-  document.getElementById("p"+num).classList.add("active");
-  document.body.className="page"+num;
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+  document.getElementById(id).style.display="flex";
+}
 
-  /* PLAY MUSIC WHEN PAGE 4 OPENS */
-  if(num==4){
-    let music=document.getElementById("birthdayMusic");
-    music.play();
+function goToPage2(){
+  userName = document.getElementById("nameInput").value;
+  if(userName.trim() === "") return;
+  document.getElementById("questionText").innerHTML = userName + ", Do you like me? 😁😁";
+  showPage("page2");
+}
+
+function moveNo(){
+  let btn = document.getElementById("noBtn");
+  btn.style.top = Math.random()*80 + "%";
+  btn.style.left = Math.random()*80 + "%";
+}
+
+function goToPage3(){
+  showPage("page3");
+  moveHeart();
+}
+
+function moveHeart(){
+  let heart = document.getElementById("heart");
+
+  heart.onclick = function(){
+    showSupportiveLines();
+    heart.style.display="none";
   }
 
-  /* STOP MUSIC AFTER PAGE 4 */
-  if(num==5){
-    let music=document.getElementById("birthdayMusic");
-    music.pause();
-    music.currentTime=0;
+  heart.onmouseover = function(){
+    tries++;
+    if(tries < 6){
+      heart.style.top = Math.random()*80 + "%";
+      heart.style.left = Math.random()*80 + "%";
+    }
+  }
+}
+
+function showSupportiveLines(){
+
+  const lines = [
+    "You stole my heart 💖",
+    "One more thing",
+    "Ik ur going through a lot but im always here for youu",
+    "I am not a speacial guy like i can promise to stayy loyal foreverr tasmia💗",
+    "And lastly just stayy with me i will make your depression away😊and aita amio promisee kori madam"
+  ];
+
+  let i = 0;
+
+  function typeLine(){
+    if(i >= lines.length){
+      document.getElementById("toBirthdayBtn").style.display="inline-block";
+      return;
+    }
+
+    let newLine = document.createElement("h2");
+    document.getElementById("afterCatch").appendChild(newLine);
+
+    let text = lines[i];
+    let j = 0;
+
+    let interval = setInterval(()=>{
+      if(j >= text.length){
+        clearInterval(interval);
+        i++;
+        setTimeout(typeLine, 600);
+        return;
+      }
+      newLine.innerHTML += text[j];
+      j++;
+    }, 40);
+  }
+
+  typeLine();
+}
+
+function goToPage4(){
+  showPage("page4");
+  document.getElementById("birthdayText").innerHTML = "Happy Birthday " + userName + " 🎉💖";
+
+  const music = document.getElementById("birthdayMusic");
+  music.currentTime = 0;
+  music.volume = 0.6;
+  music.play().catch(function(e){});
+}
+
+function goToPage5(){
+  showPage("page5");
+
+  // floating hearts
+  for(let h=0; h<25; h++){
+    let heart=document.createElement("div");
+    heart.className="floatingHeart";
+    heart.innerHTML="💖";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(15+Math.random()*25)+"px";
+    heart.style.animationDuration=(4+Math.random()*4)+"s";
+    document.getElementById("page5").appendChild(heart);
+  }
+
+  // party poppers
+  for(let i=0;i<30;i++){
+    let pop=document.createElement("div");
+    pop.className="popper";
+    pop.innerHTML="🎉";
+    pop.style.left=Math.random()*100+"vw";
+    pop.style.animationDuration=(2+Math.random()*3)+"s";
+    document.getElementById("page5").appendChild(pop);
+  }
+
+  let title="Happy Friendship Day ❤️";
+  let i=0;
+
+  function typeTitle(){
+    if(i<title.length){
+      document.getElementById("friendshipTitle").innerHTML+=title.charAt(i);
+      i++;
+      setTimeout(typeTitle,60);
+    } else {
+      typeMessage();
+    }
+  }
+
+  typeTitle();
+
+  function typeMessage(){
+    let text="Im reallly luckyy to have you madam 🥰 taii jemon tmi amrr kase speacial person temnii tmii khub matter koro amr kase ar tmr kotha o matter koree . tai kokhono na je tmr kotha omanno korbo🥰 . akhnn jevabee tmr sob ee like korii sarajibonn o same oivabeii krbo Promise🫶";
+    let j=0;
+
+    function typing(){
+      if(j<text.length){
+        document.getElementById("friendshipMessage").innerHTML+=text.charAt(j);
+        j++;
+        setTimeout(typing,40);
+      }
+    }
+
+    typing();
   }
 }
 
